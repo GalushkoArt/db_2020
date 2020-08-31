@@ -14,5 +14,4 @@ public interface DynamicIntegerArray {
 
     int size();
 
-
 }
