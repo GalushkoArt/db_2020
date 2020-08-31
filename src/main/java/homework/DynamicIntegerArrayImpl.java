@@ -3,7 +3,7 @@ package homework;
 import java.util.Arrays;
 
 public class DynamicIntegerArrayImpl implements DynamicIntegerArray {
-    private final int DEFAULT_INITIAL_CAPACITY = 10;
+    private static final int DEFAULT_INITIAL_CAPACITY = 10;
     private int[] array;
     private int size;
 
