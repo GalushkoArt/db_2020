@@ -2,7 +2,7 @@ package homework.heroes_game;
 
 import homework.heroes_game.controller.GameManager;
 import homework.heroes_game.model.Hero;
-import homework.heroes_game.model.HeroFactory;
+import homework.heroes_game.services.HeroFactory;
 
 public class HeroesMain {
     public static void main(String[] args) {

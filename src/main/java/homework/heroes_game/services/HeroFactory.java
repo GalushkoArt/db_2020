@@ -1,4 +1,6 @@
-package homework.heroes_game.model;
+package homework.heroes_game.services;
+
+import homework.heroes_game.model.*;
 
 import java.util.Random;
 
@@ -25,7 +27,7 @@ public class HeroFactory {
     }
 
     private static String getRandomKnightName() {
-        String[] names = {"Костя", "Джон Сина"};
+        String[] names = {"Костя", "Джон Сина", "Василий Федорович"};
         return names[random.nextInt(names.length)];
     }
 }
