@@ -1,8 +1,16 @@
 package homework.heroes_game.model;
 
-public class Hobbit extends Hero {
+import java.util.Random;
 
-    public Hobbit(String name) {
-        super(name, 3, 0, new HobbitFightStrategy());
+public class Hobbit extends Hero {
+    private static Random random = new Random(System.currentTimeMillis());
+
+    public Hobbit() {
+        super(getRandomHobbitName(), 3, 0, new HobbitFightStrategy());
+    }
+
+    private static String getRandomHobbitName() {
+        String[] names = {"Фродо", "Бильбо Бэггенс"};
+        return names[random.nextInt(names.length)];
     }
 }

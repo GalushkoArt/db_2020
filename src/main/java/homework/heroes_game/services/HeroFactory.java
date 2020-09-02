@@ -1,33 +1,23 @@
 package homework.heroes_game.services;
 
 import homework.heroes_game.model.*;
+import org.reflections.Reflections;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 public class HeroFactory {
     private HeroFactory() {}
     private static final Random random = new Random(System.currentTimeMillis());
 
-    public static Hero createHero() {
-        int pick = random.nextInt(4);
-        if (pick == 0) {
-            return new Elf("Малфурион Ярость Бури");
-        } else if (pick == 1) {
-            return new King("Ричард");
-        } else if (pick == 2) {
-            return new Knight(getRandomKnightName());
-        } else {
-            return new Hobbit(getRandomHobbitName());
-        }
+    public static Hero createHero() throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+        Set<Class<? extends Hero>> classesSet = new Reflections("homework/heroes_game/model/").getSubTypesOf(Hero.class);
+        List<Class<? extends Hero>> heroesList = new ArrayList<>(classesSet);
+        int pick = random.nextInt(heroesList.size());
+        return heroesList.get(pick).getDeclaredConstructor().newInstance();
     }
 
-    private static String getRandomHobbitName() {
-        String[] names = {"Фродо", "Бильбо Бэггенс"};
-        return names[random.nextInt(names.length)];
-    }
-
-    private static String getRandomKnightName() {
-        String[] names = {"Костя", "Джон Сина", "Василий Федорович"};
-        return names[random.nextInt(names.length)];
-    }
 }
