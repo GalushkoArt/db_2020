@@ -1,9 +1,7 @@
 package date_time;
 
-import java.time.Duration;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
@@ -16,20 +14,19 @@ public class Main {
 
 
     public Date convert(LocalDate date) {
-        // todo finish this
-        return null;
+        return Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant());
     }
 
     public LocalDateTime convert(Date date) {
-        // todo finish this
-        return null;
+        return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
     }
 
         // 1981/02/30&18:20
     public static int daysBetween(String firstDate, String lastDate) {
-        //JSR 310
-        //todo finish this
-        return 0;
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd&HH:mm");
+        LocalDateTime start = LocalDateTime.parse(firstDate, dtf);
+        LocalDateTime end = LocalDateTime.parse(lastDate, dtf);
+        return (int) Duration.between(start, end).toDays();
     }
 
 

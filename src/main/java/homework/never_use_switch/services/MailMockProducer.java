@@ -1,7 +1,10 @@
-package homework.never_use_switch;
+package homework.never_use_switch.services;
 
 import com.github.javafaker.Faker;
 import heroes.RandomUtil;
+import homework.never_use_switch.controllers.email_controllers.MailDistributor;
+import homework.never_use_switch.controllers.email_controllers.BasicMailDistributor;
+import homework.never_use_switch.models.MailInfo;
 import lombok.SneakyThrows;
 import org.fluttercode.datafactory.impl.DataFactory;
 
@@ -10,7 +13,7 @@ import org.fluttercode.datafactory.impl.DataFactory;
  */
 public class MailMockProducer {
 
-    private MailDistributor mailDistributor = new MailDistributor();
+    private MailDistributor mailDistributor = new BasicMailDistributor();
     private Faker faker = new Faker();
     private DataFactory dataFactory = new DataFactory();
 
@@ -18,7 +21,7 @@ public class MailMockProducer {
     @SneakyThrows
     public void sendMailsForever()  {
         while (true) {
-            int mailType = RandomUtil.getIntBetween(0, 3) + 1;
+            int mailType = RandomUtil.getIntBetween(0, 6) + 1;
             MailInfo mailInfo = MailInfo.builder()
                     .email(dataFactory.getEmailAddress())
                     .mailType(mailType)

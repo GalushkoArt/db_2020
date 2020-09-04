@@ -1,4 +1,4 @@
-package homework.never_use_switch;
+package homework.never_use_switch.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
