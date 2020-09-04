@@ -4,4 +4,5 @@ import homework.never_use_switch.models.MailInfo;
 
 public interface EmailHandler {
     void handle(MailInfo mailInfo);
+    int getType();
 }

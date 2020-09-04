@@ -4,6 +4,11 @@ import homework.never_use_switch.models.MailInfo;
 
 public class HappyBirthdayEmailHandler implements EmailHandler {
     @Override
+    public int getType() {
+        return 3;
+    }
+
+    @Override
     public void handle(MailInfo mailInfo) {
         System.out.println("Happy birthday " + mailInfo.getText() + " was sent to" + mailInfo.getEmail());
     }

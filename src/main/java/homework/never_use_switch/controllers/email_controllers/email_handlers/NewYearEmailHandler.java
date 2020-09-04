@@ -7,4 +7,9 @@ public class NewYearEmailHandler implements EmailHandler {
     public void handle(MailInfo mailInfo) {
         System.out.println("New Year email " + mailInfo.getText() + " was sent to" + mailInfo.getEmail());
     }
+
+    @Override
+    public int getType() {
+        return 4;
+    }
 }

@@ -7,4 +7,9 @@ public class DebtEmailHandler implements EmailHandler {
     public void handle(MailInfo mailInfo) {
         System.out.println("Debt email " + mailInfo.getText() + " was sent to" + mailInfo.getEmail());
     }
+
+    @Override
+    public int getType() {
+        return 2;
+    }
 }

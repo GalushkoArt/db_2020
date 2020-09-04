@@ -7,7 +7,7 @@ import homework.never_use_switch.models.MailInfo;
  * @author Evgeny Borisov
  */
 public class BasicMailDistributor implements MailDistributor {
-    private MailTypeConfiguration configuration = new MainMailTypeConfiguration();
+    private MailTypeConfiguration configuration = new AutoMailTypeConfiguration();
 
     @Override
     public void sendMailInfo(MailInfo mailInfo) throws UnsupportedOperationException {
