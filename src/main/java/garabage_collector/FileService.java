@@ -8,12 +8,6 @@ public class FileService {
         System.out.println(123);
     }
 
-    @Override
-    protected void finalize() throws Throwable {
-
-        System.out.println("закрываю все файлы");
-    }
-
     public static void main(String[] args) throws InterruptedException {
         abc();
         System.gc();

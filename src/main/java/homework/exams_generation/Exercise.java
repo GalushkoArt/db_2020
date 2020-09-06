@@ -16,7 +16,11 @@ public class Exercise {
     private double a;
     private double b;
     private double answer;
+    private double sigma;
     private Operator operator;
 
-
+    @Override
+    public String toString() {
+        return a + operator.toString() + b + " = ";
+    }
 }

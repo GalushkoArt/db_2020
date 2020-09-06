@@ -11,4 +11,9 @@ public enum Operator {
 
     private final String sign;
 
+
+    @Override
+    public String toString() {
+        return sign;
+    }
 }
