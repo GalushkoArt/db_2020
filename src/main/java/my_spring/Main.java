@@ -5,7 +5,8 @@ package my_spring;
  */
 public class Main {
     public static void main(String[] args) {
-        IRobot iRobot = new IRobot();
+        Context context = new Context();
+        IRobot iRobot = context.getInstance(IRobot.class);
         iRobot.cleanRoom();
     }
 }

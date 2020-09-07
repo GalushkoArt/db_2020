@@ -5,8 +5,10 @@ package my_spring;
  */
 public class IRobot {
 
-    private Speaker speaker = ObjectFactory.getInstance().createObject(Speaker.class);
-    private Cleaner cleaner = ObjectFactory.getInstance().createObject(Cleaner.class);
+    @InjectInstance
+    private Speaker speaker;
+    @InjectInstance
+    private Cleaner cleaner;
 
     public void cleanRoom() {
         speaker.speak("Я начал уборку");
