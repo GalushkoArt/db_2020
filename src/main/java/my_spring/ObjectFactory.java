@@ -44,8 +44,6 @@ public class ObjectFactory {
 
     @SneakyThrows
     public <T> T createObject(Class<T> implClass) {
-
-
         T t = create(implClass);
 
         configure(t);
@@ -56,8 +54,9 @@ public class ObjectFactory {
     }
 
     private <T> T proxying(T t) {
+        Class<?> c = t.getClass();
         for (ProxyConfigurer proxyConfigurer : proxyConfigurers) {
-            t = (T) proxyConfigurer.configureProxy(t);
+            t = (T) proxyConfigurer.configureProxy(t, c);
         }
         return t;
     }
@@ -68,7 +67,6 @@ public class ObjectFactory {
         for (Method method : methods) {
             if (method.isAnnotationPresent(PostConstruct.class)) {
                 method.invoke(t);
-
             }
         }
     }

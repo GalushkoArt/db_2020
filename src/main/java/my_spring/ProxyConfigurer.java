@@ -1,5 +1,5 @@
 package my_spring;
 
 public interface ProxyConfigurer {
-    Object configureProxy(Object o);
+    Object configureProxy(Object o, Class<?> c);
 }
