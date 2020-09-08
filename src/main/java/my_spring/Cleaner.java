@@ -8,4 +8,5 @@ import javax.annotation.PostConstruct;
 public interface Cleaner {
 
     void clean();
+    void clean(int i);
 }

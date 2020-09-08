@@ -5,6 +5,7 @@ import lombok.Setter;
 import lombok.SneakyThrows;
 import org.reflections.ReflectionUtils;
 import org.reflections.Reflections;
+import org.springframework.util.ClassUtils;
 
 import javax.annotation.PostConstruct;
 import java.lang.reflect.*;
@@ -20,6 +21,7 @@ public class ObjectFactory {
     private ApplicationContext context;
 
     private List<ObjectConfigurer> objectConfigurers = new ArrayList<>();
+    private List<ProxyConfigurer> proxyConfigurers = new ArrayList<>();
 
     private Reflections scanner;
 
@@ -27,11 +29,14 @@ public class ObjectFactory {
     ObjectFactory(ApplicationContext context, Reflections scanner) {
         this.scanner = scanner;
         this.context = context;
-
-        Set<Class<? extends ObjectConfigurer>> classes = scanner.getSubTypesOf(ObjectConfigurer.class);
-        for (Class<? extends ObjectConfigurer> aClass : classes) {
-            if (!Modifier.isAbstract(aClass.getModifiers())) {
-                objectConfigurers.add(aClass.getDeclaredConstructor().newInstance());
+        for (Class<? extends ObjectConfigurer> objectConfigurer : scanner.getSubTypesOf(ObjectConfigurer.class)) {
+            if (!Modifier.isAbstract(objectConfigurer.getModifiers())) {
+                objectConfigurers.add(objectConfigurer.getDeclaredConstructor().newInstance());
+            }
+        }
+        for (Class<? extends ProxyConfigurer> proxyConfigurer : scanner.getSubTypesOf(ProxyConfigurer.class)) {
+            if (!Modifier.isAbstract(proxyConfigurer.getModifiers())) {
+                proxyConfigurers.add(proxyConfigurer.getDeclaredConstructor().newInstance());
             }
         }
     }
@@ -44,29 +49,18 @@ public class ObjectFactory {
         T t = create(implClass);
 
         configure(t);
-
         invokeInitMethod(implClass, t);
-
-        if (implClass.isAnnotationPresent(Benchmark.class)) {
-            return (T) Proxy.newProxyInstance(implClass.getClassLoader(), implClass.getInterfaces(), new InvocationHandler() {
-                @Override
-                public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-
-                    System.out.println("************* BENCHMARK STARTED for method "+ method.getName()+" ****************");
-                    long start = System.nanoTime();
-                    Object retVal = method.invoke(t, args);
-                    long end = System.nanoTime();
-                    System.out.println(end-start);
-                    System.out.println("************* BENCHMARK ENDED for method "+ method.getName()+" ****************");
-                    return retVal;
-                }
-            });
-        }
+        t = proxying(t);
 
         return t;
     }
 
-
+    private <T> T proxying(T t) {
+        for (ProxyConfigurer proxyConfigurer : proxyConfigurers) {
+            t = (T) proxyConfigurer.configureProxy(t);
+        }
+        return t;
+    }
 
 
     private <T> void invokeInitMethod(Class<? extends T> implClass, T t) throws IllegalAccessException, InvocationTargetException {
@@ -78,11 +72,6 @@ public class ObjectFactory {
             }
         }
     }
-
-
-
-
-
 
     private <T> void configure(T t) {
         objectConfigurers.forEach(objectConfigurer -> objectConfigurer.configure(t,context));

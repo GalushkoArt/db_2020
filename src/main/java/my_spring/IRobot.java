@@ -27,7 +27,7 @@ public class IRobot {
 
     public void cleanRoom() {
         speaker.speak("Я начал уборку");
-        cleaner.clean();
+        cleaner.clean(20);
         speaker.speak("Я закончил уборку");
     }
 }
