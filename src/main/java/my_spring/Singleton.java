@@ -8,4 +8,5 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Retention(RUNTIME)
 public @interface Singleton {
+    boolean hot() default true;
 }

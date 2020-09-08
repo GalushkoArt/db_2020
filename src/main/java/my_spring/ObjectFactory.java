@@ -7,38 +7,23 @@ import org.reflections.ReflectionUtils;
 import org.reflections.Reflections;
 
 import javax.annotation.PostConstruct;
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author Evgeny Borisov
  */
 public class ObjectFactory {
-
-
-
-    private static ObjectFactory objectFactory = new ObjectFactory();
     @Setter
     private Config config;
-
+    private Reflections scanner;
+    private Map<Class<?>, Object> singletons = new HashMap<>();
     private List<ObjectConfigurer> objectConfigurers = new ArrayList<>();
+    private static ObjectFactory objectFactory = new ObjectFactory();
 
-    private Reflections scanner = new Reflections("my_spring");
-
-    @SneakyThrows
     private ObjectFactory() {
-
-        Set<Class<? extends ObjectConfigurer>> classes = scanner.getSubTypesOf(ObjectConfigurer.class);
-        for (Class<? extends ObjectConfigurer> aClass : classes) {
-            if (!Modifier.isAbstract(aClass.getModifiers())) {
-                objectConfigurers.add(aClass.getDeclaredConstructor().newInstance());
-            }
-        }
     }
 
     public static ObjectFactory getInstance() {
@@ -47,43 +32,62 @@ public class ObjectFactory {
 
     @SneakyThrows
     public <T> T createObject(Class<T> type) {
+        if (singletons.get(type) != null) {
+            return (T) singletons.get(type);
+        }
         Class<? extends T> implClass = resolveImpl(type);
         T t = create(implClass);
         configure(t);
         invokeInitMethod(implClass, t);
+        if (implClass.isAnnotationPresent(Singleton.class)) {
+            singletons.put(type, t);
+            singletons.put(implClass, t);
+        }
         return t;
     }
 
-
-
+    @SneakyThrows
+    protected void setupFactory(Config config) {
+        this.config = config;
+        scanner = new Reflections(config.getPackageToScan());
+        Set<Class<? extends ObjectConfigurer>> classes = scanner.getSubTypesOf(ObjectConfigurer.class);
+        for (Class<? extends ObjectConfigurer> aClass : classes) {
+            if (!Modifier.isAbstract(aClass.getModifiers())) {
+                objectConfigurers.add(aClass.getDeclaredConstructor().newInstance());
+            }
+        }
+        setupConfigurers();
+        setupSingletons();
+    }
 
     private <T> void invokeInitMethod(Class<? extends T> implClass, T t) throws IllegalAccessException, InvocationTargetException {
         Set<Method> methods = ReflectionUtils.getAllMethods(implClass);
         for (Method method : methods) {
             if (method.isAnnotationPresent(PostConstruct.class)) {
                 method.invoke(t);
-
             }
         }
     }
 
+    @SneakyThrows
+    private void setupConfigurers()  {
+        for (Class<? extends ObjectConfigurer> aClass : scanner.getSubTypesOf(ObjectConfigurer.class)) {
+            if (!Modifier.isAbstract(aClass.getModifiers())) {
+                objectConfigurers.add(aClass.getDeclaredConstructor().newInstance());
+            }
+        }
+    }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    private void setupSingletons() {
+        for (Class<?> annotated : scanner.getTypesAnnotatedWith(Singleton.class)) {
+            Singleton annotation = annotated.getAnnotation(Singleton.class);
+            if (annotation.hot()) {
+                createObject(annotated);
+            } else {
+                singletons.put(annotated, null);
+            }
+        }
+    }
 
     private <T> void configure(T t) {
         objectConfigurers.forEach(objectConfigurer -> objectConfigurer.configure(t));
@@ -104,7 +108,7 @@ public class ObjectFactory {
                 }
                 implClass = classes.iterator().next();
             }
-        }else {
+        } else {
             implClass = type;
         }
         return implClass;
