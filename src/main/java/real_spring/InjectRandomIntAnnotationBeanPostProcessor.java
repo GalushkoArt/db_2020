@@ -1,4 +1,4 @@
-package real_spring.quoters;
+package real_spring;
 
 import my_spring.ApplicationContext;
 import my_spring.InjectRandomIntAnnotationObjectConfigurer;
