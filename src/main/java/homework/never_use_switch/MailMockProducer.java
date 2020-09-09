@@ -14,8 +14,10 @@ import org.springframework.stereotype.Component;
 public class MailMockProducer {
     @Autowired
     private MailDistributor mailDistributor;
-    private Faker faker = new Faker();
-    private DataFactory dataFactory = new DataFactory();
+    @Autowired
+    private Faker faker;
+    @Autowired
+    private DataFactory dataFactory;
 
 
     @SneakyThrows
