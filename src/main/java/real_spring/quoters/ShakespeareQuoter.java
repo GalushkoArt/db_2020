@@ -3,6 +3,8 @@ package real_spring.quoters;
 import lombok.Setter;
 import my_spring.InjectRandomInt;
 
+import javax.annotation.PostConstruct;
+
 /**
  * @author Evgeny Borisov
  */
@@ -16,6 +18,7 @@ public class ShakespeareQuoter implements Quoter {
 
 
     @Override
+    @PostConstruct
     public void sayQuote() {
         for (int i = 0; i < repeat; i++) {
             System.out.println(message);

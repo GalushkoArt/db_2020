@@ -5,9 +5,8 @@
        xmlns:context="http://www.springframework.org/schema/context">
 
 
-
-
     <bean class="org.springframework.context.annotation.CommonAnnotationBeanPostProcessor"/>
+    <bean class="real_spring.InjectRandomIntAnnotationBeanPostProcessor"/>
 
 
     <bean id="anotherQuote" class="java.lang.String">
