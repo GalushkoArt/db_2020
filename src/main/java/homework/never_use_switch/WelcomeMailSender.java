@@ -1,8 +1,11 @@
 package homework.never_use_switch;
 
+import org.springframework.stereotype.Component;
+
 /**
  * @author Evgeny Borisov
  */
+@Component("mailSender1")
 public class WelcomeMailSender implements MailSender {
     @Override
     public void sendMail(MailInfo mailInfo) {

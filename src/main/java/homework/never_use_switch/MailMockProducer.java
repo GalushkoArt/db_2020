@@ -4,13 +4,16 @@ import com.github.javafaker.Faker;
 import heroes.RandomUtil;
 import lombok.SneakyThrows;
 import org.fluttercode.datafactory.impl.DataFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * @author Evgeny Borisov
  */
+@Component
 public class MailMockProducer {
-
-    private MailDistributor mailDistributor = new MailDistributor();
+    @Autowired
+    private MailDistributor mailDistributor;
     private Faker faker = new Faker();
     private DataFactory dataFactory = new DataFactory();
 
@@ -30,10 +33,6 @@ public class MailMockProducer {
             }
             Thread.sleep(1000);
         }
-    }
-
-    public static void main(String[] args) {
-        new MailMockProducer().sendMailsForever();
     }
 }
 
