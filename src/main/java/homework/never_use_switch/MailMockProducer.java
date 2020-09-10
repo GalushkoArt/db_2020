@@ -5,6 +5,7 @@ import heroes.RandomUtil;
 import lombok.SneakyThrows;
 import org.fluttercode.datafactory.impl.DataFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 /**
@@ -20,21 +21,14 @@ public class MailMockProducer {
     private DataFactory dataFactory;
 
 
-    @SneakyThrows
-    public void sendMailsForever()  {
-        while (true) {
-            int mailType = RandomUtil.getIntBetween(0, 3) + 1;
-            MailInfo mailInfo = MailInfo.builder()
-                    .email(dataFactory.getEmailAddress())
-                    .mailType(mailType)
-                    .text(faker.chuckNorris().fact()).build();
-            try {
-                mailDistributor.sendMailInfo(mailInfo);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            Thread.sleep(1000);
-        }
+    @Scheduled(fixedDelay = 1000)
+    public void sendMailsForever() {
+        int mailType = RandomUtil.getIntBetween(0, 3) + 1;
+        MailInfo mailInfo = MailInfo.builder()
+                .email(dataFactory.getEmailAddress())
+                .mailType(mailType)
+                .text(faker.chuckNorris().fact()).build();
+        mailDistributor.sendMailInfo(mailInfo);
     }
 }
 
