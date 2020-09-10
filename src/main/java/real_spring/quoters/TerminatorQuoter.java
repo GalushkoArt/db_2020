@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -15,8 +14,7 @@ import java.util.List;
  */
 @Component
 public class TerminatorQuoter implements Quoter {
-    @Autowired
-    @Qualifier("terminator")
+    @Value("#{'${terminator}'.split(',')}")
     private List<String> messages;
 
     @Override

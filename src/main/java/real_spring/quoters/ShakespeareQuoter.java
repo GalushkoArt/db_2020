@@ -1,21 +1,17 @@
 package real_spring.quoters;
 
 import my_spring.InjectRandomInt;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
 
 /**
  * @author Evgeny Borisov
  */
 @Component
 public class ShakespeareQuoter implements Quoter {
-    @Autowired
-    @Qualifier("shake")
+    @Value("${shake}")
     private String message;
 
     @InjectRandomInt(min = 4,max = 7)
