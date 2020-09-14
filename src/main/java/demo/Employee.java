@@ -5,7 +5,7 @@ import lombok.Builder;
 /**
  * @author Evgeny Borisov
  */
-@Builder
+//@Builder
 public class Employee extends Person {
     private int salary;
     public Employee(String name, int age) {

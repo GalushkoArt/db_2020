@@ -16,12 +16,12 @@ public class Main {
     public static void main(String[] args) {
 
 
-        Stream<Employee> employeeStream = Stream.of(Employee.builder().salary(100).build(), Employee.builder().salary(3999).build());
-        employeeStream.mapToInt(Employee::getSalary).summaryStatistics();
+//        Stream<Employee> employeeStream = Stream.of(Employee.builder().salary(100).build(), Employee.builder().salary(3999).build());
+//        employeeStream.mapToInt(Employee::getSalary).summaryStatistics();
 
 
-      Stream.of(Employee.builder().build())
-                .collect(Collectors.groupingBy(Employee::getSalary,Collectors.maxBy(Comparator.comparingInt(Employee::getSalary))));
+//      Stream.of(Employee.builder().build())
+//                .collect(Collectors.groupingBy(Employee::getSalary,Collectors.maxBy(Comparator.comparingInt(Employee::getSalary))));
 
         boolean b = Stream.iterate(1, integer -> ++integer).anyMatch(integer -> integer == 10);
         System.out.println("b = " + b);
