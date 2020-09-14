@@ -16,6 +16,6 @@ public class ListUtilsTest {
     public void countDuplicates() {
 
         List<String> list = List.of("java", "JAVA", "scala", "groovy");
-        Assert.assertEquals(2, ListUtils.countDuplicates(list,"java"));// todd make it to take lamda which will explain how to compare if obects are equals
+        Assert.assertEquals(2, ListUtils.countDuplicates(list,"java", String::toUpperCase));// todd make it to take lamda which will explain how to compare if obects are equals
     }
 }
